@@ -81,7 +81,10 @@ class AttackResult(ABC):
 
 
     def __str__(self, color_method=None):
-        return "\n\n".join(self.str_lines(color_method=color_method))
+        try:
+            return "\n\n".join(self.str_lines(color_method=color_method))
+        except Exception:
+            print("error")
 
     def goal_function_result_str(self, color_method=None):
         try:
