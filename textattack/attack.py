@@ -81,8 +81,8 @@ class Attack:
         constraints: List[Union[Constraint, PreTransformationConstraint]],
         transformation: Transformation,
         search_method: SearchMethod,
-        transformation_cache_size=2**15,
-        constraint_cache_size=2**15,
+        transformation_cache_size=2 ** 15,
+        constraint_cache_size=2 ** 15,
     ):
         """Initialize an attack object.
 
@@ -375,11 +375,15 @@ class Attack:
                 ] = self.constraints_cache[(current_text, transformed_text)]
                 if self.constraints_cache[(current_text, transformed_text)]:
                     filtered_texts.append(transformed_text)
-        filtered_texts += self._filter_transformations_uncached(
-            uncached_texts, current_text, original_text=original_text
-        )
-        # Sort transformations to ensure order is preserved between runs
-        filtered_texts.sort(key=lambda t: t.text)
+        try:
+            filtered_texts += self._filter_transformations_uncached(
+                uncached_texts, current_text, original_text=original_text
+            )
+            # Sort transformations to ensure order is preserved between runs
+            filtered_texts.sort(key=lambda t: t.text)
+        except Exception:
+            print("error")
+
         return filtered_texts
 
     def _attack(self, initial_result):
