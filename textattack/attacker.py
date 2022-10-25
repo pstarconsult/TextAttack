@@ -168,6 +168,7 @@ class Attacker:
                 result = self.attack.attack(example, ground_truth_output)
             except Exception as e:
                 raise e
+            # below call is where you land after Attack is called. 'result' is data structure with num_queries [PS 10-21-2022]
             if (
                 isinstance(result, SkippedAttackResult) and self.attack_args.attack_n
             ) or (
@@ -195,8 +196,9 @@ class Attacker:
                 num_successes += 1
             if isinstance(result, FailedAttackResult):
                 num_failures += 1
+            #Added {result.num_queries} so it prints with other stats[PS 10-21-22]
             pbar.set_description(
-                f"[Succeeded / Failed / Skipped / Total] {num_successes} / {num_failures} / {num_skipped} / {num_results}"
+                f"[Succeeded / Failed / Skipped / Num Queries / Total] {num_successes} / {num_failures} / {num_skipped} / {result.num_queries} / {num_results}"
             )
 
             if (
@@ -365,7 +367,7 @@ class Attacker:
             if isinstance(result, FailedAttackResult):
                 num_failures += 1
             pbar.set_description(
-                f"[Succeeded / Failed / Skipped / Total] {num_successes} / {num_failures} / {num_skipped} / {num_results}"
+                f"[Succeeded / Failed / Skipped / Num Queries / Total] {num_successes} / {num_failures} / {num_skipped} / {result.num_queries} / {num_results}"
             )
 
             if (
